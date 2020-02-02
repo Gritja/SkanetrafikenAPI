@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -48,13 +49,15 @@ public class StationServlet extends HttpServlet {
 		// response.getWriter().append("Served at: ").append(request.getContextPath());
 		// String uName = request.getParameter("name");
 
-		ArrayList<String> listOfStation = new ArrayList();
+		ArrayList<String> listOfStations = new ArrayList<String>();
 
 		// response.setContentType("text/html");
 
 		PrintWriter out = response.getWriter();
 
 		String stationName = request.getParameter("Station");
+		
+		//response.setContentType("text/html");
 
 		// out.print("<br>");
 
@@ -106,6 +109,11 @@ public class StationServlet extends HttpServlet {
 
 		System.out.println(nList.getLength());
 		System.out.println(sList.getLength());
+		
+		//we want to create a bean to handle the information, if it were sensitive (although still a get rather than post)
+		//beanThingie beanie = new beanThingie();
+		
+		
 		// loop through the content of the tag
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			// Save a node of the current list id
@@ -117,8 +125,9 @@ public class StationServlet extends HttpServlet {
 				Element eElement = (Element) node;
 				// get the content of an attribute in element
 				// and print it out to the client
-
-				listOfStation.add(eElement.getElementsByTagName("Name").item(0).getTextContent());
+				beanThingie.setStation(eElement.getElementsByTagName("Name").item(0).getTextContent());
+				
+				//listOfStations.add(eElement.getElementsByTagName("Name").item(0).getTextContent());
 
 				// out.print("Nearest stop " +
 				// eElement.getElementsByTagName("Name").item(0).getTextContent());
@@ -130,9 +139,16 @@ public class StationServlet extends HttpServlet {
 			}
 		}
 
-		for (int temp = 0; temp < listOfStation.size(); temp++) {
-			out.println(listOfStation.get(temp));
-		}
+		RequestDispatcher rd=request.getRequestDispatcher("stationweather.jsp");
+		rd.forward(request, response);
+				
+//		for (int temp = 0; temp < beanie.getSize(); temp++) {
+//			out.print(beanie.getStation(temp));
+//		}
+		
+
+		
+
 
 	}
 
@@ -143,7 +159,7 @@ public class StationServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		//doGet(request, response);
 	}
 
 //Method the makes a XML doc out of a string, if it is in a XML format. 	
